@@ -1,0 +1,14 @@
+AllCops:
+  TargetRubyVersion: 2.6
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Metrics:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/StructInheritance:
+  Enabled: false
