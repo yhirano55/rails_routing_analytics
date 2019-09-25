@@ -28,17 +28,18 @@ module RailsRoutingAnalytics
       private
 
       def find_route_from(path, method:)
-        info = grape_api_class.recognize_path(path)
-        return unless info
+        api = grape_api_class.compile.router.instance_eval do
+          with_optimization { match?(path, method) }
+        end
+        return unless api.respond_to?(:path) # 404
 
-        api = info.routes[0]
         path = api.path.gsub(':version', api.version)
         verb = ::RailsRoutingAnalytics.find_verb(method)
         ::RailsRoutingAnalytics::Route.new(path, verb)
       end
 
       def valid_api_class?
-        grape_api_class.respond_to?(:recognize_path) && grape_api_class.respond_to?(:routes)
+        grape_api_class.respond_to?(:compile) && grape_api_class.respond_to?(:routes)
       end
 
       def grape_api_class
